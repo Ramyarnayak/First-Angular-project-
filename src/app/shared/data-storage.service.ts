@@ -6,7 +6,7 @@ import { Recipe } from '../recipes/recipe.model';
 import { RecipeService } from '../recipes/recipe.service';
 import { AuthService } from '../auth/auth.service';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: 'root' }) // To add service to app module
 export class DataStorageService {
   constructor(
     private http: HttpClient,
