@@ -50,12 +50,13 @@ export class AuthComponent implements OnDestroy {
     } else {
       authObs = this.authService.signup(email, password);
     }
-
+ 
+    //observer for both login and signup
     authObs.subscribe(
       resData => {
         console.log(resData);
         this.isLoading = false;
-        this.router.navigate(['/recipes']);
+        this.router.navigate(['/recipes']); // navigate to recipes in case of successful login or sign up
       },
       errorMessage => {
         console.log(errorMessage);
@@ -79,7 +80,7 @@ export class AuthComponent implements OnDestroy {
   }
 
   private showErrorAlert(message: string) {
-    // const alertCmp = new AlertComponent();
+    
     const alertCmpFactory = this.componentFactoryResolver.resolveComponentFactory(
       AlertComponent
     );

@@ -6,6 +6,7 @@ import { throwError, BehaviorSubject } from 'rxjs';
 
 import { User } from './user.model';
 
+//response data has all these properties
 export interface AuthResponseData {
   kind: string;
   idToken: string;
@@ -13,17 +14,18 @@ export interface AuthResponseData {
   refreshToken: string;
   expiresIn: string;
   localId: string;
-  registered?: boolean;
+  registered?: boolean;                                 //'?' indicates optional
 }
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  user = new BehaviorSubject<User>(null);
+  user = new BehaviorSubject<User>(null);             //BehaviourSubject gives immediate access to the previouslyemitted value
   private tokenExpirationTimer: any;
 
   constructor(private http: HttpClient, private router: Router) {}
 
   signup(email: string, password: string) {
+    //To send a post request to firebase
     return this.http
       .post<AuthResponseData>(
         'https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=AIzaSyCoKFWUM9OOHmsGX-xB32M_xEYo-oebBrw',
@@ -47,6 +49,7 @@ export class AuthService {
   }
 
   login(email: string, password: string) {
+        //To send a post request to firebase
     return this.http
       .post<AuthResponseData>(
         'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=AIzaSyCoKFWUM9OOHmsGX-xB32M_xEYo-oebBrw',
@@ -75,7 +78,7 @@ export class AuthService {
       id: string;
       _token: string;
       _tokenExpirationDate: string;
-    } = JSON.parse(localStorage.getItem('userData'));
+    } = JSON.parse(localStorage.getItem('userData'));          
     if (!userData) {
       return;
     }
@@ -97,7 +100,7 @@ export class AuthService {
   }
 
   logout() {
-    this.user.next(null);
+    this.user.next(null);   // setting user as null as initialised
     this.router.navigate(['/auth']);
     localStorage.removeItem('userData');
     if (this.tokenExpirationTimer) {
@@ -107,7 +110,8 @@ export class AuthService {
   }
 
   autoLogout(expirationDuration: number) {
-    this.tokenExpirationTimer = setTimeout(() => {
+    console.log(expirationDuration);
+    this.tokenExpirationTimer = setTimeout(() => {              // automatically logout once expireDuration meets
       this.logout();
     }, expirationDuration);
   }
@@ -118,17 +122,17 @@ export class AuthService {
     token: string,
     expiresIn: number
   ) {
-    const expirationDate = new Date(new Date().getTime() + expiresIn * 1000);
+    const expirationDate = new Date(new Date().getTime() + expiresIn * 1000); // time in milliseconds
     const user = new User(email, userId, token, expirationDate);
-    this.user.next(user);
+    this.user.next(user);                                                     //emit user as currently logged in
     this.autoLogout(expiresIn * 1000);
-    localStorage.setItem('userData', JSON.stringify(user));
+    localStorage.setItem('userData', JSON.stringify(user));                   //localstorage for storing user information
   }
 
   private handleError(errorRes: HttpErrorResponse) {
     let errorMessage = 'An unknown error occurred!';
     if (!errorRes.error || !errorRes.error.error) {
-      return throwError(errorMessage);
+      return throwError(errorMessage); 
     }
     switch (errorRes.error.error.message) {
       case 'EMAIL_EXISTS':
