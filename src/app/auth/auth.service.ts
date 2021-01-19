@@ -24,7 +24,6 @@ export class AuthService {
   constructor(private http: HttpClient, private router: Router) {}
 
   signup(email: string, password: string) {
-    //HTTP sign up request to firebase
     return this.http
       .post<AuthResponseData>(
         'https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=AIzaSyCoKFWUM9OOHmsGX-xB32M_xEYo-oebBrw',
@@ -34,7 +33,6 @@ export class AuthService {
           returnSecureToken: true
         }
       )
-      
       .pipe(
         catchError(this.handleError),
         tap(resData => {
@@ -47,7 +45,7 @@ export class AuthService {
         })
       );
   }
- //HTTP login request to firebase
+
   login(email: string, password: string) {
     return this.http
       .post<AuthResponseData>(
@@ -71,8 +69,6 @@ export class AuthService {
       );
   }
 
-  
-  //To keep user logged in unless user logout
   autoLogin() {
     const userData: {
       email: string;
@@ -129,7 +125,6 @@ export class AuthService {
     localStorage.setItem('userData', JSON.stringify(user));
   }
 
-  //Displaying Error messages according to firebase existing errors
   private handleError(errorRes: HttpErrorResponse) {
     let errorMessage = 'An unknown error occurred!';
     if (!errorRes.error || !errorRes.error.error) {

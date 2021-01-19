@@ -15,8 +15,7 @@ const appRoutes: Routes = [
   {
     path: 'recipes',
     component: RecipesComponent,
-    canActivate: [AuthGuard], //canActivate routeguard
-    //Children routes
+    canActivate: [AuthGuard],
     children: [
       { path: '', component: RecipeStartComponent },
       { path: 'new', component: RecipeEditComponent },
@@ -28,7 +27,7 @@ const appRoutes: Routes = [
       {
         path: ':id/edit',
         component: RecipeEditComponent,
-        resolve: [RecipesResolverService]  
+        resolve: [RecipesResolverService]
       }
     ]
   },
