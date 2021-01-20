@@ -24,8 +24,8 @@ exports:[
     CommonModule 
 
 ],
-entryComponents: [
-    AlertComponent
-  ]
+// entryComponents: [
+//     AlertComponent
+//   ]
 })
 export class SharedModule{}

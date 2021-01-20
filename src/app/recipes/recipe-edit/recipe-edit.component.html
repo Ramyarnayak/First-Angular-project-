@@ -1,5 +1,3 @@
-
-<!-- Reactive form -->
 <div class="row">
   <div class="col-xs-12">
     <form [formGroup]="recipeForm" (ngSubmit)="onSubmit()">
@@ -52,7 +50,6 @@
               class="form-control"
               formControlName="description"
               rows="6"></textarea>
-              
           </div>
         </div>
       </div>
@@ -60,7 +57,7 @@
         <div class="col-xs-12" formArrayName="ingredients">
           <div
             class="row"
-            *ngFor="let ingredientCtrl of recipeForm.get('ingredients'); let i = index"
+            *ngFor="let ingredientCtrl of recipeForm.get('ingredients').controls; let i = index"
             [formGroupName]="i"
             style="margin-top: 10px;">
             <div class="col-xs-8">
